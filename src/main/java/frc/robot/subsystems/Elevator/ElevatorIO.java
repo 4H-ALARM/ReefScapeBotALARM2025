@@ -5,7 +5,9 @@
 package frc.robot.subsystems.Elevator;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.RobotConstants;
+import frc.lib.constants.RobotConstants;
+import frc.lib.statehandler.statesEnum;
+
 import org.littletonrobotics.junction.AutoLog;
 
 /** Add your docs here. */
@@ -19,7 +21,7 @@ public interface ElevatorIO {
     String enumState;
   }
 
-  public void moveToState(RobotConstants.ElevatorConstants.elevatorState state);
+  public void moveToState(statesEnum state);
 
   public void move(double input);
 

@@ -26,13 +26,14 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.lib.constants.ModeConstants;
+import frc.lib.constants.SwerveConstants;
 import frc.robot.commands.Drive.DriveCommands;
 import frc.robot.commands.ElevatorCommands.elevatorSetHeightIntake;
 import frc.robot.commands.EndEffector.IntakeClaw;
 import frc.robot.commands.EndEffector.IntakeWrist;
 import frc.robot.commands.EndEffector.OutakeClaw;
 import frc.robot.commands.EndEffector.OutakeWrist;
-import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIONeo;
 import frc.robot.subsystems.claw.ClawIOVortex;
@@ -82,16 +83,16 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    switch (Constants.currentMode) {
+    switch (ModeConstants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
         drive =
             new Drive(
                 new GyroIOPigeon2(),
-                new ModuleIOTalonFX(TunerConstants.FrontLeft),
-                new ModuleIOTalonFX(TunerConstants.FrontRight),
-                new ModuleIOTalonFX(TunerConstants.BackLeft),
-                new ModuleIOTalonFX(TunerConstants.BackRight));
+                new ModuleIOTalonFX(SwerveConstants.FrontLeft),
+                new ModuleIOTalonFX(SwerveConstants.FrontRight),
+                new ModuleIOTalonFX(SwerveConstants.BackLeft),
+                new ModuleIOTalonFX(SwerveConstants.BackRight));
 
         vision =
             new Vision(
@@ -118,10 +119,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIO() {},
-                new ModuleIOSim(TunerConstants.FrontLeft),
-                new ModuleIOSim(TunerConstants.FrontRight),
-                new ModuleIOSim(TunerConstants.BackLeft),
-                new ModuleIOSim(TunerConstants.BackRight));
+                new ModuleIOSim(SwerveConstants.FrontLeft),
+                new ModuleIOSim(SwerveConstants.FrontRight),
+                new ModuleIOSim(SwerveConstants.BackLeft),
+                new ModuleIOSim(SwerveConstants.BackRight));
 
         vision =
             new Vision(

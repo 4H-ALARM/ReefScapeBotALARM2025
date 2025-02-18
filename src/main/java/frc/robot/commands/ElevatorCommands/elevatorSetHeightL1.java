@@ -5,7 +5,8 @@
 package frc.robot.commands.ElevatorCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotConstants;
+import frc.lib.constants.RobotConstants;
+import frc.lib.statehandler.statesEnum;
 import frc.robot.subsystems.Elevator.Elevator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -21,7 +22,7 @@ public class elevatorSetHeightL1 extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.elevator.setGoalState(RobotConstants.ElevatorConstants.elevatorState.L1);
+    this.elevator.setGoalState(statesEnum.L1);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,7 +36,7 @@ public class elevatorSetHeightL1 extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (this.elevator.getGoalState() == RobotConstants.ElevatorConstants.elevatorState.L1) {
+    if (this.elevator.getGoalState() == statesEnum.L1) {
       return true;
     }
     return false;

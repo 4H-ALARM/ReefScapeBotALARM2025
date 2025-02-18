@@ -10,8 +10,9 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.RobotConstants;
-import frc.robot.RobotConstants.ElevatorConstants.elevatorState;
+import frc.lib.constants.RobotConstants;
+import frc.lib.statehandler.statesEnum;
+
 import org.littletonrobotics.junction.Logger;
 
 public class ElevatorIONeo implements ElevatorIO {
@@ -31,7 +32,7 @@ public class ElevatorIONeo implements ElevatorIO {
   // private final DigitalInput bottomLimitSwitch;
   // private final DigitalInput topLimitSwitch;
 
-  private elevatorState state = elevatorState.DEFAULT;
+  private statesEnum state = statesEnum.RESTING;
 
   public ElevatorIONeo() {
 
@@ -70,7 +71,7 @@ public class ElevatorIONeo implements ElevatorIO {
   }
 
   @Override
-  public void moveToState(RobotConstants.ElevatorConstants.elevatorState state) {
+  public void moveToState(statesEnum state) {
     boolean atLowestPoint = false;
     boolean atHighestPoint = false;
     // if (bottomLimitSwitch.get()) {
@@ -80,7 +81,7 @@ public class ElevatorIONeo implements ElevatorIO {
     //   atHighestPoint = true;
     // }
     this.state = state;
-    moveToPoint(state.getTargetRotation2d());
+    moveToPoint(this.state.getState().elevatorHeightRot);
   }
 
   @Override
