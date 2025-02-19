@@ -34,7 +34,7 @@ public class EndEffector extends SubsystemBase {
     this.wrist.resetEncoder();
   }
 
-  public boolean getResults() {
+  public boolean getWristResults() {
     if (wrist.getAngle().getRotations()
             > stateHandler.getState().getState().wristRot.getRotations() - 0.3
         && wrist.getAngle().getRotations()
@@ -42,6 +42,10 @@ public class EndEffector extends SubsystemBase {
       return true;
     }
     return false;
+  }
+
+  public boolean getIntaked() {
+    return claw.getbeambreak();
   }
 
   @Override

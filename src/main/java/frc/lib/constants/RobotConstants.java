@@ -17,6 +17,7 @@ public class RobotConstants {
 
     public static int wristmotorID = 19;
     public static int clawmotorID = 20;
+    public static int canRange = 21;
 
     public static final Rotation2d restingrot = Rotation2d.fromRotations(19);
     public static final Rotation2d intakerot = Rotation2d.fromRotations(18.7);

@@ -14,6 +14,8 @@ public interface ClawIO {
 
   public void stopMotor();
 
+  public boolean getbeambreak();
+
   // Periodic updates for logging and other state handling
   public default void updateInputs() {}
   ;

@@ -43,7 +43,7 @@ public class setStateIntake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (elevator.getResults() && endEffector.getResults()) {
+    if (endEffector.getIntaked()) {
       return true;
     }
     return false;
