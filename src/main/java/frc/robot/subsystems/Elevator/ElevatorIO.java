@@ -5,23 +5,22 @@
 package frc.robot.subsystems.Elevator;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.lib.constants.RobotConstants;
-import frc.lib.statehandler.statesEnum;
-
+import frc.lib.statehandler.robotState;
 import org.littletonrobotics.junction.AutoLog;
 
 /** Add your docs here. */
 public interface ElevatorIO {
   @AutoLog
   public static class ElevatorIOInputs {
-    Rotation2d axleRotation;
-    double height;
-    boolean leadisConnected;
-    boolean followerisConnected;
-    String enumState;
+    // double axleRotation;
+    // double motorRotation;
+    // double motorDiff;
+    // boolean leadisConnected;
+    // boolean followerisConnected;
+    // String enumState;
   }
 
-  public void moveToState(statesEnum state);
+  public void moveToState(robotState state);
 
   public void move(double input);
 
@@ -32,6 +31,8 @@ public interface ElevatorIO {
   public void resetEncoder();
 
   public void moveToPoint(Rotation2d targetRot);
+
+  public boolean getResults();
 
   public default void updateInputs(ElevatorIOInputs inputs) {}
 }

@@ -11,7 +11,6 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.constants.RobotConstants;
-
 import org.littletonrobotics.junction.Logger;
 
 public class WristIONeo implements WristIO {

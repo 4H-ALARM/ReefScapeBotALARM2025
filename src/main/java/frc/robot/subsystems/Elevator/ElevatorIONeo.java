@@ -11,9 +11,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.constants.RobotConstants;
-import frc.lib.statehandler.statesEnum;
-
-import org.littletonrobotics.junction.Logger;
+import frc.lib.statehandler.robotState;
 
 public class ElevatorIONeo implements ElevatorIO {
 
@@ -27,12 +25,10 @@ public class ElevatorIONeo implements ElevatorIO {
   private final SparkMaxConfig leadConfig;
   private final SparkMaxConfig followerConfig;
 
-  // private final DigitalInput limitswitchBottom;
+  private robotState targetState;
 
   // private final DigitalInput bottomLimitSwitch;
   // private final DigitalInput topLimitSwitch;
-
-  private statesEnum state = statesEnum.RESTING;
 
   public ElevatorIONeo() {
 
@@ -42,7 +38,6 @@ public class ElevatorIONeo implements ElevatorIO {
     leadMotor = new SparkMax(RobotConstants.ElevatorConstants.leadMotorID, MotorType.kBrushless);
     followerMotor =
         new SparkMax(RobotConstants.ElevatorConstants.followerMotorID, MotorType.kBrushless);
-    // limitswitchBottom = new DigitalInput(RobotConstants.Elevator.bottomlimitswitchID);
 
     encoder = leadMotor.getEncoder();
     encoder.setPosition(0);
@@ -55,11 +50,7 @@ public class ElevatorIONeo implements ElevatorIO {
         .pid(0.0025, 0, 0)
         .minOutput(-1)
         .maxOutput(1)
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        .maxMotion
-        .allowedClosedLoopError(0.5)
-        .maxAcceleration(56000)
-        .maxVelocity(5600);
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
 
     leadMotor.configure(leadConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -68,10 +59,12 @@ public class ElevatorIONeo implements ElevatorIO {
     followerConfig.follow(RobotConstants.ElevatorConstants.leadMotorID, true);
     followerMotor.configure(
         followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    targetState = robotState.RESTING;
   }
 
   @Override
-  public void moveToState(statesEnum state) {
+  public void moveToState(robotState state) {
     boolean atLowestPoint = false;
     boolean atHighestPoint = false;
     // if (bottomLimitSwitch.get()) {
@@ -80,8 +73,8 @@ public class ElevatorIONeo implements ElevatorIO {
     // if (topLimitSwitch.get()) {
     //   atHighestPoint = true;
     // }
-    this.state = state;
-    moveToPoint(this.state.getState().elevatorHeightRot);
+    targetState = state;
+    moveToPoint(state.getState().elevatorHeightRot);
   }
 
   @Override
@@ -130,8 +123,22 @@ public class ElevatorIONeo implements ElevatorIO {
   }
 
   @Override
+  public boolean getResults() {
+    if (encoder.getPosition() < targetState.getState().elevatorHeightRot.getRotations() + 0.3
+        && encoder.getPosition() > targetState.getState().elevatorHeightRot.getRotations() - 0.3) {
+      return true;
+    }
+    return false;
+  }
+
+  @Override
   public void updateInputs(ElevatorIOInputs inputs) {
-    Logger.recordOutput("elevator/encoder", getEncoder());
-    inputs.enumState = state.name();
+    // inputs.axleRotation = leadMotor.getAlternateEncoder().getPosition();
+    // inputs.motorRotation = leadMotor.getEncoder().getPosition();
+    // inputs.motorDiff =
+    //     leadMotor.getEncoder().getPosition() >= 0
+    //         ? leadMotor.getEncoder().getPosition() - followerMotor.getEncoder().getPosition()
+    //         : leadMotor.getEncoder().getPosition() + followerMotor.getEncoder().getPosition();
+    // inputs.enumState = targetState.toString();
   }
 }

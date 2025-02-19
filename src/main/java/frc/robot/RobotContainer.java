@@ -28,12 +28,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.constants.ModeConstants;
 import frc.lib.constants.SwerveConstants;
+import frc.lib.statehandler.stateHandler;
 import frc.robot.commands.Drive.DriveCommands;
-import frc.robot.commands.ElevatorCommands.elevatorSetHeightIntake;
-import frc.robot.commands.EndEffector.IntakeClaw;
-import frc.robot.commands.EndEffector.IntakeWrist;
-import frc.robot.commands.EndEffector.OutakeClaw;
-import frc.robot.commands.EndEffector.OutakeWrist;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIONeo;
 import frc.robot.subsystems.claw.ClawIOVortex;
@@ -68,6 +64,8 @@ public class RobotContainer {
 
   private final EndEffector endEffector;
 
+  private final stateHandler stateHandler;
+
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
   private final CommandXboxController copilot = new CommandXboxController(1);
@@ -75,17 +73,14 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
-  public final IntakeClaw intakeClaw;
-  public final OutakeClaw outakeClaw;
-  public final IntakeWrist intakeWrist;
-  public final OutakeWrist outakeWrist;
-  public final elevatorSetHeightIntake iElevatorSetHeightIntake;
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     switch (ModeConstants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
+
+        stateHandler = new stateHandler();
+
         drive =
             new Drive(
                 new GyroIOPigeon2(),
@@ -103,19 +98,15 @@ public class RobotContainer {
                 new VisionIOPhotonVision(camera4Name, robotToCamera4),
                 new VisionIOLimelight(limelightName, drive::getRotation));
 
-        elevator = new Elevator(new ElevatorIONeo());
-        iElevatorSetHeightIntake = new elevatorSetHeightIntake(elevator);
-
+        elevator = new Elevator(new ElevatorIONeo(), stateHandler);
         endEffector = new EndEffector(new ClawIOVortex(), new WristIONeo());
-        intakeClaw = new IntakeClaw(endEffector);
-        outakeClaw = new OutakeClaw(endEffector);
-        intakeWrist = new IntakeWrist(endEffector);
-        outakeWrist = new OutakeWrist(endEffector);
 
         break;
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
+        stateHandler = new stateHandler();
+
         drive =
             new Drive(
                 new GyroIO() {},
@@ -133,18 +124,13 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(camera4Name, robotToCamera4, drive::getPose));
 
         endEffector = new EndEffector(new ClawIOVortex(), new WristIONeo());
+        elevator = new Elevator(new ElevatorIONeo(), stateHandler);
 
-        intakeClaw = new IntakeClaw(endEffector);
-        outakeClaw = new OutakeClaw(endEffector);
-        intakeWrist = new IntakeWrist(endEffector);
-        outakeWrist = new OutakeWrist(endEffector);
-
-        elevator = new Elevator(new ElevatorIONeo());
-        iElevatorSetHeightIntake = new elevatorSetHeightIntake(elevator);
         break;
 
       default:
         // Replayed robot, disable IO implementations
+        stateHandler = new stateHandler();
 
         drive =
             new Drive(
@@ -164,14 +150,7 @@ public class RobotContainer {
                 new VisionIO() {});
 
         endEffector = new EndEffector(new ClawIOVortex(), new WristIONeo());
-
-        intakeClaw = new IntakeClaw(endEffector);
-        outakeClaw = new OutakeClaw(endEffector);
-        intakeWrist = new IntakeWrist(endEffector);
-        outakeWrist = new OutakeWrist(endEffector);
-
-        elevator = new Elevator(new ElevatorIONeo());
-        iElevatorSetHeightIntake = new elevatorSetHeightIntake(elevator);
+        elevator = new Elevator(new ElevatorIONeo(), stateHandler);
 
         break;
     }
@@ -218,9 +197,6 @@ public class RobotContainer {
         new InstantCommand(() -> elevator.moveElevator(copilot.getLeftY()), elevator));
 
     copilot.a().onTrue(new InstantCommand(elevator::resetEncoder));
-    copilot.y().whileTrue(iElevatorSetHeightIntake);
-
-    // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // Reset gyro to 0° when B button is pressed
     controller
@@ -233,11 +209,10 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    copilot.rightBumper().whileTrue(intakeClaw);
-    copilot.leftBumper().whileTrue(outakeClaw);
-    copilot.rightTrigger().whileTrue(intakeWrist);
-    copilot.leftTrigger().whileTrue(outakeWrist);
     copilot.x().onTrue(new InstantCommand(endEffector::resetWristEncoder));
+
+    // controller.leftTrigger().onTrue(new
+    // InstantCommand(stateHandler.setState(robotState.INTAKE)));
   }
 
   /**

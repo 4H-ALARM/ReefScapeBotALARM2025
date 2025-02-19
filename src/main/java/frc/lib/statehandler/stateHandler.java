@@ -5,4 +5,19 @@
 package frc.lib.statehandler;
 
 /** Add your docs here. */
-public class stateHandler {}
+public class stateHandler {
+
+  protected robotState state;
+
+  public stateHandler() {
+    state = robotState.RESTING;
+  }
+
+  public void setState(robotState givenState) {
+    state = givenState;
+  }
+
+  public robotState getState() {
+    return state;
+  }
+}

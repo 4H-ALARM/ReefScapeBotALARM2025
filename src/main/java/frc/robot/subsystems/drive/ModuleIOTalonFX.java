@@ -13,6 +13,8 @@
 
 package frc.robot.subsystems.drive;
 
+import static frc.lib.util.PhoenixUtil.*;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -39,9 +41,6 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import frc.lib.constants.SwerveConstants;
-
-import static frc.lib.util.PhoenixUtil.*;
-
 import java.util.Queue;
 
 /**
@@ -99,7 +98,8 @@ public class ModuleIOTalonFX implements ModuleIO {
       SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
           constants) {
     this.constants = constants;
-    driveTalon = new TalonFX(constants.DriveMotorId, SwerveConstants.DrivetrainConstants.CANBusName);
+    driveTalon =
+        new TalonFX(constants.DriveMotorId, SwerveConstants.DrivetrainConstants.CANBusName);
     turnTalon = new TalonFX(constants.SteerMotorId, SwerveConstants.DrivetrainConstants.CANBusName);
     cancoder = new CANcoder(constants.EncoderId, SwerveConstants.DrivetrainConstants.CANBusName);
 

@@ -18,13 +18,16 @@ public class RobotConstants {
     public static int wristmotorID = 19;
     public static int clawmotorID = 20;
 
+    public static final Rotation2d restingrot = Rotation2d.fromRotations(19);
+    public static final Rotation2d intakerot = Rotation2d.fromRotations(18.7);
+    public static final Rotation2d L1rot = Rotation2d.fromRotations(4);
+    public static final Rotation2d L2rot = Rotation2d.fromRotations(3);
+    public static final Rotation2d L3rot = Rotation2d.fromRotations(2);
+    public static final Rotation2d L4rot = Rotation2d.fromRotations(0);
 
-    public static final Rotation2d restingrot = new Rotation2d();
-    public static final Rotation2d intakerot = new Rotation2d();
-    public static final Rotation2d L1rot = new Rotation2d();
-    public static final Rotation2d L2rot = new Rotation2d();
-    public static final Rotation2d L3rot = new Rotation2d();
-    public static final Rotation2d L4rot = new Rotation2d();
+    public static final double intakespeed = 0.5;
+    public static final double holdspeed = 0.1;
+    public static final double throwspeed = -0.3;
   }
 
   public static class ElevatorConstants {
@@ -33,11 +36,11 @@ public class RobotConstants {
     public static final int bottomlimitswitchID = 1;
     public static final int toplimitswitchID = 1;
 
-    public static final Rotation2d restingheight = new Rotation2d();
-    public static final Rotation2d intakeheight = new Rotation2d().fromRotations(-40);
-    public static final Rotation2d L1height = new Rotation2d();
-    public static final Rotation2d L2height = new Rotation2d();
-    public static final Rotation2d L3height = new Rotation2d();
-    public static final Rotation2d L4height = new Rotation2d();
+    public static final Rotation2d restingheight = Rotation2d.fromRotations(0);
+    public static final Rotation2d intakeheight = Rotation2d.fromRotations(-4.6);
+    public static final Rotation2d L1height = Rotation2d.fromRotations(0);
+    public static final Rotation2d L2height = Rotation2d.fromRotations(-15);
+    public static final Rotation2d L3height = Rotation2d.fromRotations(-37.5);
+    public static final Rotation2d L4height = Rotation2d.fromRotations(-69.25);
   }
 }
