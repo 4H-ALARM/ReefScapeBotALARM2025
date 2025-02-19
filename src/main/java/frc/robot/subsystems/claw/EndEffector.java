@@ -4,54 +4,51 @@
 
 package frc.robot.subsystems.claw;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.statehandler.stateHandler;
 
 public class EndEffector extends SubsystemBase {
 
   private final ClawIO claw;
   private final WristIO wrist;
+  private final stateHandler stateHandler;
 
   private WristIOInputsAutoLogged wristIOInputsAutoLogged;
   private ClawIOInputsAutoLogged clawIOInputsAutoLogged;
 
   /** Creates a new EndEffector. */
-  public EndEffector(ClawIO clawimpl, WristIO wristimpl) {
+  public EndEffector(ClawIO clawimpl, WristIO wristimpl, stateHandler handler) {
     this.claw = clawimpl;
     this.wrist = wristimpl;
+    this.stateHandler = handler;
 
     this.wristIOInputsAutoLogged = new WristIOInputsAutoLogged();
     this.clawIOInputsAutoLogged = new ClawIOInputsAutoLogged();
-  }
-
-  public void outEndEffector(double speed) {
-    this.claw.setSpeed(speed);
-  }
-
-  public void inEndEffector(double speed) {
-    this.claw.setSpeed(speed);
-  }
-
-  public void setWristAngle(Rotation2d angle) {
-    this.wrist.setAngle(angle);
   }
 
   public void stopWrist() {
     this.wrist.stopMotor();
   }
 
-  public void stopClaw() {
-    this.claw.stopMotor();
-  }
-
   public void resetWristEncoder() {
     this.wrist.resetEncoder();
   }
 
+  public boolean getResults() {
+    if (wrist.getAngle().getRotations()
+            > stateHandler.getState().getState().wristRot.getRotations() - 0.3
+        && wrist.getAngle().getRotations()
+            < stateHandler.getState().getState().wristRot.getRotations() + 0.3) {
+      return true;
+    }
+    return false;
+  }
+
   @Override
   public void periodic() {
+    this.wrist.setAngle(stateHandler.getState().getState().wristRot);
+    this.claw.setSpeed(stateHandler.getState().getState().clawSpeed);
     this.claw.updateInputs();
     this.wrist.updateInputs();
-    this.wrist.log();
   }
 }

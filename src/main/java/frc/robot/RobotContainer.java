@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.constants.ModeConstants;
 import frc.lib.constants.SwerveConstants;
+import frc.lib.statehandler.setStateIntake;
 import frc.lib.statehandler.stateHandler;
 import frc.robot.commands.Drive.DriveCommands;
 import frc.robot.subsystems.Elevator.Elevator;
@@ -73,6 +74,8 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
+  public final setStateIntake intake;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     switch (ModeConstants.currentMode) {
@@ -99,7 +102,9 @@ public class RobotContainer {
                 new VisionIOLimelight(limelightName, drive::getRotation));
 
         elevator = new Elevator(new ElevatorIONeo(), stateHandler);
-        endEffector = new EndEffector(new ClawIOVortex(), new WristIONeo());
+        endEffector = new EndEffector(new ClawIOVortex(), new WristIONeo(), stateHandler);
+
+        intake = new setStateIntake(elevator, endEffector, stateHandler);
 
         break;
 
@@ -123,8 +128,10 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(camera3Name, robotToCamera3, drive::getPose),
                 new VisionIOPhotonVisionSim(camera4Name, robotToCamera4, drive::getPose));
 
-        endEffector = new EndEffector(new ClawIOVortex(), new WristIONeo());
         elevator = new Elevator(new ElevatorIONeo(), stateHandler);
+        endEffector = new EndEffector(new ClawIOVortex(), new WristIONeo(), stateHandler);
+
+        intake = new setStateIntake(elevator, endEffector, stateHandler);
 
         break;
 
@@ -149,8 +156,10 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {});
 
-        endEffector = new EndEffector(new ClawIOVortex(), new WristIONeo());
         elevator = new Elevator(new ElevatorIONeo(), stateHandler);
+        endEffector = new EndEffector(new ClawIOVortex(), new WristIONeo(), stateHandler);
+
+        intake = new setStateIntake(elevator, endEffector, stateHandler);
 
         break;
     }
@@ -211,8 +220,7 @@ public class RobotContainer {
 
     copilot.x().onTrue(new InstantCommand(endEffector::resetWristEncoder));
 
-    // controller.leftTrigger().onTrue(new
-    // InstantCommand(stateHandler.setState(robotState.INTAKE)));
+    controller.leftTrigger().onTrue(intake);
   }
 
   /**

@@ -133,12 +133,12 @@ public class ElevatorIONeo implements ElevatorIO {
 
   @Override
   public void updateInputs(ElevatorIOInputs inputs) {
-    // inputs.axleRotation = leadMotor.getAlternateEncoder().getPosition();
-    // inputs.motorRotation = leadMotor.getEncoder().getPosition();
-    // inputs.motorDiff =
-    //     leadMotor.getEncoder().getPosition() >= 0
-    //         ? leadMotor.getEncoder().getPosition() - followerMotor.getEncoder().getPosition()
-    //         : leadMotor.getEncoder().getPosition() + followerMotor.getEncoder().getPosition();
-    // inputs.enumState = targetState.toString();
+    inputs.axleRotation = leadMotor.getAlternateEncoder().getPosition();
+    inputs.motorRotation = leadMotor.getEncoder().getPosition();
+    inputs.motorDiff =
+        leadMotor.getEncoder().getPosition() >= 0
+            ? leadMotor.getEncoder().getPosition() - followerMotor.getEncoder().getPosition()
+            : leadMotor.getEncoder().getPosition() + followerMotor.getEncoder().getPosition();
+    inputs.enumState = targetState.toString();
   }
 }

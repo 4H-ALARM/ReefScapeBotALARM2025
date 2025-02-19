@@ -12,12 +12,12 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ElevatorIO {
   @AutoLog
   public static class ElevatorIOInputs {
-    // double axleRotation;
-    // double motorRotation;
-    // double motorDiff;
-    // boolean leadisConnected;
-    // boolean followerisConnected;
-    // String enumState;
+    double axleRotation;
+    double motorRotation;
+    double motorDiff;
+    boolean leadisConnected;
+    boolean followerisConnected;
+    String enumState;
   }
 
   public void moveToState(robotState state);

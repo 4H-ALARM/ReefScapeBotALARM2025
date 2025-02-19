@@ -10,13 +10,13 @@ public interface WristIO {
     ;
   }
 
-  public void setAngle(Rotation2d angle);
+  public void setAngle(Rotation2d targetState);
 
   public void stopMotor();
 
-  public void log();
-
   public void resetEncoder();
+
+  public Rotation2d getAngle();
 
   // Updates any periodic logging or state
   public default void updateInputs() {}
