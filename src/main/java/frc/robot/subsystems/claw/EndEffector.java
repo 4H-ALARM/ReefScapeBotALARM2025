@@ -15,10 +15,8 @@ public class EndEffector extends SubsystemBase {
   private WristIOInputsAutoLogged wristIOInputsAutoLogged;
   private ClawIOInputsAutoLogged clawIOInputsAutoLogged;
 
-  public
-
   /** Creates a new EndEffector. */
-  private EndEffector(ClawIO clawimpl, WristIO wristimpl) {
+  public EndEffector(ClawIO clawimpl, WristIO wristimpl) {
     this.claw = clawimpl;
     this.wrist = wristimpl;
 
